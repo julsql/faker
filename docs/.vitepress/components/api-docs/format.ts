@@ -8,18 +8,15 @@ export async function formatResult(result: unknown): Promise<string> {
     ? 'undefined'
     : (
         await format(
-          `export default ${JSON.stringify(result).replaceAll('\\r', '').replaceAll('<', '&lt;')}`,
+          JSON.stringify(result).replaceAll('\\r', '').replaceAll('<', '&lt;'),
           options
         )
-      )
-        .replace(/^export default /, '')
-        .replace(/;\s*$/, '')
-        .replaceAll(/\n */g, ' ');
+      ).replaceAll(/\n */g, ' ');
 }
 
 const options: Options = {
   singleQuote: true,
   trailingComma: 'none',
-  parser: 'babel',
-  plugins: [pluginBabel, pluginEstree], // TODO try json5/jsonc
+  parser: 'json5',
+  plugins: [pluginBabel, pluginEstree],
 };
