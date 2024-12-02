@@ -84,18 +84,22 @@ async function onRefresh() {
   if (refresh != null && codeBlock.value != null) {
     codeLines ??= initRefresh();
 
+    const [results, { formatResult }] = await Promise.all([
+      refresh(),
+      import('./format.ts'),
+    ]);
+
     // Remove old comments
     codeBlock.value
       .querySelectorAll('.comment-delete-marker')
       .forEach((el) => el.remove());
 
-    const results = await refresh();
-
     // Insert new comments
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
       const domLine = codeLines[i];
-      const resultLines = stringify(result).split('\\n');
+      const prettyResult = await formatResult(result);
+      const resultLines = prettyResult.split('\\n');
 
       if (resultLines.length === 1) {
         domLine.insertAdjacentHTML('beforeend', newCommentSpan(resultLines[0]));
@@ -106,21 +110,6 @@ async function onRefresh() {
       }
     }
   }
-}
-
-function stringify(result: unknown): string {
-  return result === undefined
-    ? 'undefined'
-    : JSON.stringify(result, null, 1)
-        .replaceAll('\\r', '')
-        .replaceAll('<', '&lt;')
-        .replaceAll(
-          // Change quotes if possible
-          /^( *)"([^'\n]*)"(,?)$/gm,
-          (_, pre, main, post) =>
-            `${pre}'${main.replaceAll('\\"', '"')}'${post}`
-        )
-        .replaceAll(/\n */g, ' ');
 }
 
 function newCommentLine(content: string): string {
