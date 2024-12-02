@@ -25,7 +25,7 @@ function delay(ms: number) {
     :disabled="spinning"
     @click="onRefresh"
   >
-    <div :class="{ spinning: spinning }">⟳</div>
+    <div :class="{ spinning: spinning }" />
   </button>
 </template>
 
@@ -39,12 +39,21 @@ button.refresh {
   vertical-align: middle;
 }
 
+button.refresh div {
+  background-image: url('refresh.svg');
+  background-position: 50%;
+  background-size: 20px;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
 button.refresh:hover {
   background-color: var(--vp-code-copy-code-bg);
   opacity: 1;
 }
 
-.spinning {
+div.spinning {
   animation: spin 1s linear infinite;
 }
 
