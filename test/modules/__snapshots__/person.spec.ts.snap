@@ -4,7 +4,7 @@ exports[`person > 42 > bio 1`] = `"traveler, philosopher, model"`;
 
 exports[`person > 42 > firstName > noArgs 1`] = `"Moses"`;
 
-exports[`person > 42 > firstName > with sex 1`] = `"Darnell"`;
+exports[`person > 42 > firstName > with sex 1`] = `"Tyrone"`;
 
 exports[`person > 42 > fullName > noArgs 1`] = `"Moses Crist"`;
 
@@ -14,7 +14,7 @@ exports[`person > 42 > fullName > with firstName 1`] = `"John Reynolds-Miller"`;
 
 exports[`person > 42 > fullName > with lastName 1`] = `"Moses Doe"`;
 
-exports[`person > 42 > fullName > with sex 1`] = `"Lorene Miller"`;
+exports[`person > 42 > fullName > with sex 1`] = `"Tracy Miller"`;
 
 exports[`person > 42 > gender 1`] = `"Gender nonconforming"`;
 
@@ -36,7 +36,7 @@ exports[`person > 42 > middleName > with sex 1`] = `"William"`;
 
 exports[`person > 42 > prefix > noArgs 1`] = `"Mrs."`;
 
-exports[`person > 42 > prefix > with sex 1`] = `"Dr."`;
+exports[`person > 42 > prefix > with sex 1`] = `"Mr."`;
 
 exports[`person > 42 > sex > noArgs 1`] = `"female"`;
 
@@ -56,17 +56,17 @@ exports[`person > 42 > zodiacSign 1`] = `"Gemini"`;
 
 exports[`person > 1211 > bio 1`] = `"decongestant supporter, parent 🎲"`;
 
-exports[`person > 1211 > firstName > noArgs 1`] = `"D'angelo"`;
+exports[`person > 1211 > firstName > noArgs 1`] = `"Dane"`;
 
 exports[`person > 1211 > firstName > with sex 1`] = `"Skye"`;
 
-exports[`person > 1211 > fullName > noArgs 1`] = `"D'angelo Osinski-Paucek"`;
+exports[`person > 1211 > fullName > noArgs 1`] = `"Dane Osinski-Paucek"`;
 
 exports[`person > 1211 > fullName > with all (sex) 1`] = `"John Doe PhD"`;
 
-exports[`person > 1211 > fullName > with firstName 1`] = `"Dr. John Fahey DDS"`;
+exports[`person > 1211 > fullName > with firstName 1`] = `"Mr. John Fahey DDS"`;
 
-exports[`person > 1211 > fullName > with lastName 1`] = `"Dr. D'angelo Doe DDS"`;
+exports[`person > 1211 > fullName > with lastName 1`] = `"Mr. Dane Doe DDS"`;
 
 exports[`person > 1211 > fullName > with sex 1`] = `"Skye Zieme"`;
 
@@ -110,19 +110,19 @@ exports[`person > 1211 > zodiacSign 1`] = `"Capricorn"`;
 
 exports[`person > 1337 > bio 1`] = `"creator, engineer, friend"`;
 
-exports[`person > 1337 > firstName > noArgs 1`] = `"Eva"`;
+exports[`person > 1337 > firstName > noArgs 1`] = `"Emma"`;
 
-exports[`person > 1337 > firstName > with sex 1`] = `"Eugene"`;
+exports[`person > 1337 > firstName > with sex 1`] = `"Christopher"`;
 
-exports[`person > 1337 > fullName > noArgs 1`] = `"Eva Hammes"`;
+exports[`person > 1337 > fullName > noArgs 1`] = `"Emma Hammes"`;
 
 exports[`person > 1337 > fullName > with all (sex) 1`] = `"John Doe"`;
 
 exports[`person > 1337 > fullName > with firstName 1`] = `"John Gottlieb"`;
 
-exports[`person > 1337 > fullName > with lastName 1`] = `"Eva Doe"`;
+exports[`person > 1337 > fullName > with lastName 1`] = `"Emma Doe"`;
 
-exports[`person > 1337 > fullName > with sex 1`] = `"Marilyn Koelpin"`;
+exports[`person > 1337 > fullName > with sex 1`] = `"Chelsea Koelpin"`;
 
 exports[`person > 1337 > gender 1`] = `"Demigender"`;
 
@@ -142,9 +142,9 @@ exports[`person > 1337 > middleName > noArgs 1`] = `"Dylan"`;
 
 exports[`person > 1337 > middleName > with sex 1`] = `"Christopher"`;
 
-exports[`person > 1337 > prefix > noArgs 1`] = `"Ms."`;
+exports[`person > 1337 > prefix > noArgs 1`] = `"Miss"`;
 
-exports[`person > 1337 > prefix > with sex 1`] = `"Mr."`;
+exports[`person > 1337 > prefix > with sex 1`] = `"Dr."`;
 
 exports[`person > 1337 > sex > noArgs 1`] = `"female"`;
 
