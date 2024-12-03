@@ -23,10 +23,6 @@ import type { LocaleDefinition, MetadataDefinition } from '../src/definitions';
 import { keys } from '../src/internal/keys';
 import { formatMarkdown, formatTypescript } from './apidocs/utils/format';
 
-// TODO @ST-DDT 2024-12-03: Remove console log
-console.log('| locale | entry | female | generic | male |');
-console.log('| :----: | :---: | :----: | :-----: | :--: |');
-
 // Constants
 
 const pathRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -332,24 +328,17 @@ async function updateLocaleFileHook(
   }
 
   if (definitionKey === 'person' && entryName != null) {
-    await normalizePersonFile(locale, entryName, filePath);
+    await normalizePersonFile(filePath);
   }
 
   return normalizeLocaleFile(filePath, definitionKey);
 }
 
-async function normalizePersonFile(
-  locale: string,
-  entryName: string,
-  filePath: string
-) {
+async function normalizePersonFile(filePath: string) {
   const { default: data } = (await import(`file:${filePath}`)) as {
     default: PersonEntryDefinition<string>;
   };
   const { female = [], generic = [], male = [] } = data ?? {};
-  const femaleCount = female.length,
-    genericCount = generic.length,
-    maleCount = male.length;
 
   // Revert merging of female and male => generic
   for (let i = generic.length; i >= 0; --i) {
@@ -383,43 +372,7 @@ async function normalizePersonFile(
 
   const newContent = `export default ${JSON.stringify(newData)};`;
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping -- Temp
-  const diffHighlight = (oldValue: number, newValue: number) => {
-    if (oldValue === newValue) {
-      if (oldValue === 0) {
-        return '';
-      }
-
-      return `${oldValue}`;
-    }
-
-    if (newValue === 0) {
-      return `${oldValue} ❌`;
-    }
-
-    return `${oldValue} ➡ ${newValue}`;
-  };
-
-  // TODO @ST-DDT 2024-12-03: Remove console log
-  if (
-    (female.length > 0 || generic.length > 0 || male.length > 0) &&
-    (femaleCount !== female.length ||
-      genericCount !== generic.length ||
-      maleCount !== male.length)
-  ) {
-    console.log(
-      '|',
-      locale,
-      '|',
-      entryName,
-      '|',
-      diffHighlight(femaleCount, female.length),
-      '|',
-      diffHighlight(genericCount, generic.length),
-      '|',
-      diffHighlight(maleCount, male.length),
-      '|'
-    );
+  if (female.length > 0 || generic.length > 0 || male.length > 0) {
     await writeFile(filePath, await formatTypescript(newContent));
   }
 }
@@ -478,7 +431,7 @@ async function normalizeLocaleFile(filePath: string, definitionKey: string) {
     return;
   }
 
-  // console.log(`Running data normalization for:`, filePath);
+  console.log(`Running data normalization for:`, filePath);
 
   const fileContent = await readFile(filePath, { encoding: 'utf8' });
   const searchString = 'export default ';
