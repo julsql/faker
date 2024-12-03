@@ -399,7 +399,7 @@ export class SimpleHelpersModule extends SimpleModuleBase {
         replacement = this.faker.string.alphanumeric(repetitions);
       } else if (isCaseInsensitive) {
         replacement = this.faker.string.fromCharacters(
-          [token[1].toLocaleLowerCase(), token[1].toLocaleUpperCase()],
+          [token[1].toLowerCase(), token[1].toUpperCase()],
           repetitions
         );
       } else {
