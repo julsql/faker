@@ -23,6 +23,7 @@ import type { LocaleDefinition, MetadataDefinition } from '../src/definitions';
 import { keys } from '../src/internal/keys';
 import { formatMarkdown, formatTypescript } from './apidocs/utils/format';
 
+// TODO @ST-DDT 2024-12-03: Remove console log
 console.log('| locale | entry | female | generic | male |');
 console.log('| :----: | :---: | :----: | :-----: | :--: |');
 
@@ -331,71 +332,96 @@ async function updateLocaleFileHook(
   }
 
   if (definitionKey === 'person' && entryName != null) {
-    const { default: data } = (await import(`file:${filePath}`)) as {
-      default: PersonEntryDefinition<string>;
-    };
-    const { female = [], generic = [], male = [] } = data ?? {};
-    const femaleCount = female.length,
-      genericCount = generic.length,
-      maleCount = male.length;
-
-    // Revert merging of female and male => generic
-    for (let i = generic.length; i >= 0; --i) {
-      if (female.includes(generic[i]) !== male.includes(generic[i])) {
-        generic.splice(i, 1);
-      }
-    }
-
-    // Remove generic entries from females and detect new generic entries
-    for (let i = female.length; i >= 0; --i) {
-      if (generic.includes(female[i])) {
-        female.splice(i, 1);
-      } else if (male.includes(female[i])) {
-        generic.push(female[i]);
-        female.splice(i, 1);
-      }
-    }
-
-    // Remove generic entries from males
-    for (let i = male.length; i >= 0; --i) {
-      if (generic.includes(male[i])) {
-        male.splice(i, 1);
-      }
-    }
-
-    const newData = {
-      generic: generic.length > 0 ? generic.sort() : undefined,
-      female: female.length > 0 ? female.sort() : undefined,
-      male: male.length > 0 ? male.sort() : undefined,
-    };
-
-    const newContent = `export default ${JSON.stringify(newData)};`;
-
-    if (female.length > 0 || generic.length > 0 || male.length > 0) {
-      console.log(
-        '|',
-        locale,
-        '|',
-        entryName,
-        '|',
-        femaleCount,
-        '➡',
-        female.length,
-        '|',
-        genericCount,
-        '➡',
-        generic.length,
-        '|',
-        maleCount,
-        '➡',
-        male.length,
-        '|'
-      );
-      await writeFile(filePath, await formatTypescript(newContent));
-    }
+    await normalizePersonFile(locale, entryName, filePath);
   }
 
   return normalizeLocaleFile(filePath, definitionKey);
+}
+
+async function normalizePersonFile(
+  locale: string,
+  entryName: string,
+  filePath: string
+) {
+  const { default: data } = (await import(`file:${filePath}`)) as {
+    default: PersonEntryDefinition<string>;
+  };
+  const { female = [], generic = [], male = [] } = data ?? {};
+  const femaleCount = female.length,
+    genericCount = generic.length,
+    maleCount = male.length;
+
+  // Revert merging of female and male => generic
+  for (let i = generic.length; i >= 0; --i) {
+    if (female.includes(generic[i]) !== male.includes(generic[i])) {
+      generic.splice(i, 1);
+    }
+  }
+
+  // Remove generic entries from females and detect new generic entries
+  for (let i = female.length; i >= 0; --i) {
+    if (generic.includes(female[i])) {
+      female.splice(i, 1);
+    } else if (male.includes(female[i])) {
+      generic.push(female[i]);
+      female.splice(i, 1);
+    }
+  }
+
+  // Remove generic entries from males
+  for (let i = male.length; i >= 0; --i) {
+    if (generic.includes(male[i])) {
+      male.splice(i, 1);
+    }
+  }
+
+  const newData = {
+    generic: generic.length > 0 ? generic.sort() : undefined,
+    female: female.length > 0 ? female.sort() : undefined,
+    male: male.length > 0 ? male.sort() : undefined,
+  };
+
+  const newContent = `export default ${JSON.stringify(newData)};`;
+
+  // eslint-disable-next-line unicorn/consistent-function-scoping -- Temp
+  const diffHighlight = (oldValue: number, newValue: number) => {
+    if (oldValue === newValue) {
+      if (oldValue === 0) {
+        return '';
+      }
+
+      return `${oldValue}`;
+    }
+
+    if (newValue === 0) {
+      return `${oldValue} ❌`;
+    }
+
+    return `${oldValue} ➡ ${newValue}`;
+  };
+
+  // TODO @ST-DDT 2024-12-03: Remove console log
+  if (
+    (female.length > 0 || generic.length > 0 || male.length > 0) &&
+    (femaleCount !== female.length ||
+      genericCount !== generic.length ||
+      maleCount !== male.length)
+  ) {
+    console.log(
+      '|',
+      locale,
+      '|',
+      entryName,
+      '|',
+      diffHighlight(femaleCount, female.length),
+      '|',
+      diffHighlight(genericCount, generic.length),
+      '|',
+      diffHighlight(maleCount, male.length),
+      '|'
+    );
+    await writeFile(filePath, await formatTypescript(newContent));
+  }
 }
 
 /**
